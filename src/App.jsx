@@ -95,12 +95,21 @@ class IssueList extends React.Component {
       console.log(err);
     });
   }
-  createIssue(issue) {
-    issue.id = this.state.issues.length + 1;
-    issue.created = new Date();
-    const newIssueList = this.state.issues.slice();
-    newIssueList.push(issue);
-    this.setState({ issues: newIssueList });
+  createIssue(newIssue) {
+    fetch('/api/issues', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newIssue),
+    }).then(response =>                                                                            response.json()
+    ).then(updatedIssue => {
+      updatedIssue.created = new Date(updatedIssue.created);
+      if (updatedIssue.due)
+        updatedIssue.due = new Date(updatedIssue.due);
+      const newIssues = this.state.issues.concat(updatedIssue);
+      this.setState({ issues: newIssues });
+    }).catch(err => {
+      alert("Error in sending data to server: " + err.message);
+    });
   }
   render() {
     return (

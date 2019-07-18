@@ -152,13 +152,28 @@ function (_React$Component3) {
     }
   }, {
     key: "createIssue",
-    value: function createIssue(issue) {
-      issue.id = this.state.issues.length + 1;
-      issue.created = new Date();
-      var newIssueList = this.state.issues.slice();
-      newIssueList.push(issue);
-      this.setState({
-        issues: newIssueList
+    value: function createIssue(newIssue) {
+      var _this4 = this;
+
+      fetch('/api/issues', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newIssue)
+      }).then(function (response) {
+        return response.json();
+      }).then(function (updatedIssue) {
+        updatedIssue.created = new Date(updatedIssue.created);
+        if (updatedIssue.due) updatedIssue.due = new Date(updatedIssue.due);
+
+        var newIssues = _this4.state.issues.concat(updatedIssue);
+
+        _this4.setState({
+          issues: newIssues
+        });
+      }).catch(function (err) {
+        alert("Error in sending data to server: " + err.message);
       });
     }
   }, {
