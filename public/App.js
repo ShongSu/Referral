@@ -72,13 +72,11 @@ function (_React$Component2) {
         style: rowStyle
       }, "Title"))), React.createElement("tbody", null, React.createElement(IssueRow, {
         rowStyle: rowStyle,
-        issue_id: 1,
-        issue_title: "Error in console when clicking Add"
-      }), React.createElement(IssueRow, {
+        issue_id: 1
+      }, "Error in console when clicking Add"), React.createElement(IssueRow, {
         rowStyle: rowStyle,
-        issue_id: 2,
-        issue_title: "Missing bottom border on panel"
-      })));
+        issue_id: 2
+      }, React.createElement("div", null, "Missing ", React.createElement("b", null, "bottom"), " border on panel"))));
     }
   }]);
 
@@ -104,7 +102,7 @@ function (_React$Component3) {
         style: style
       }, this.props.issue_id), React.createElement("td", {
         style: style
-      }, this.props.issue_title));
+      }, this.props.children));
     }
   }]);
 
