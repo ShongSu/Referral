@@ -1,27 +1,25 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const { MongoClient } = require('mongodb')
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
+
+const url = 'mongodb://localhost/issuetracker';
+let db;
+
+async function connectToDb() {
+  const client = new MongoClient(url, { useNewUrlParser: true });
+  await client.connect();
+  console.log('Connected to MongoDB at', url);
+  db = client.db();
+}
+
 app.get('/hello', (req, res) => {
   res.send('Hello World');
 });
-
-
-const issues = [
-  {
-    id: 1, status: 'New', owner: 'Ravan', effort: 5,
-    created: new Date('2018-08-15'), due: undefined,
-    title: 'Error in console when clicking Add',
-  },
-  {
-    id: 2, status: 'Assigned', owner: 'Eddie', effort: 14,
-    created: new Date('2018-08-16'), due: new Date('2018-08-30'),
-    title: 'Missing bottom border on panel',
-  },
-];
 
 const validIssueStatus = {
   New: true,
@@ -59,14 +57,32 @@ function validateIssue(issue) {
   return null;
 }
 
+
 app.get('/api/issues', (req, res) => {
-  const metadata = { total_count: issues.length };
-  res.json({ _metadata: metadata, records: issues });
+  db.collection('issues').find().toArray().then(issues => {
+    const metadata = { total_count: issues.length };
+    res.json({ _metadata: metadata, records: issues })
+  }).catch(error => {
+    console.log(error);
+    res.status(500).json({ message: `Internal Server Error: ${error}` });
+  });
 });
 
-app.post('/api/issues', (req, res) => {
+async function getNextSequence(name) {
+  const result = await db.collection('counters').findOneAndUpdate(
+    { _id: name },
+    { $inc: { current: 1 } },
+    { returnOriginal: false },
+  );
+  return result.value.current;
+}
+
+app.post('/api/issues', async (req, res) => {
   const newIssue = req.body;
-  newIssue.id = issues.length + 1;
+
+  newIssue.id = await getNextSequence('issues');
+  console.log(newIssue.id);
+
   newIssue.created = new Date();
   if (!newIssue.status)
     newIssue.status = 'New';
@@ -76,11 +92,19 @@ app.post('/api/issues', (req, res) => {
     res.status(422).json({ message: `Invalid requrest: ${err}` });
     return;
   }
-  issues.push(newIssue);
-
-  res.json(newIssue);
+  const result = await db.collection('issues').insertOne(newIssue);
+  const savedIssue = await db.collection('issues')
+    .findOne({ _id: result.insertedId });
+  res.json(savedIssue);
 });
 
-app.listen(3000, () => {
-  console.log('App started on port 3000');
-});
+(async function () {
+  try {
+    await connectToDb();
+    app.listen(3000, function () {
+      console.log('App started on port 3000');
+    });
+  } catch (err) {
+    console.log('ERROR:', err);
+  }
+})();

@@ -135,19 +135,25 @@ function (_React$Component3) {
       var _this3 = this;
 
       fetch('/api/issues').then(function (response) {
-        return response.json();
-      }).then(function (data) {
-        console.log("Total count of records:", data._metadata.total_count);
-        data.records.forEach(function (issue) {
-          issue.created = new Date(issue.created);
-          if (issue.due) issue.due = new Date(issue.due);
-        });
+        if (response.ok) {
+          response.json().then(function (data) {
+            console.log("Total count of records:", data._metadata.total_count);
+            data.records.forEach(function (issue) {
+              issue.created = new Date(issue.created);
+              if (issue.due) issue.due = new Date(issue.due);
+            });
 
-        _this3.setState({
-          issues: data.records
-        });
+            _this3.setState({
+              issues: data.records
+            });
+          });
+        } else {
+          response.json().then(function (error) {
+            alert("Failed to fetch issues:" + error.message);
+          });
+        }
       }).catch(function (err) {
-        console.log(err);
+        alert("Error in fetching data from server:", err);
       });
     }
   }, {
