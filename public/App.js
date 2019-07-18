@@ -18,7 +18,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var issues = [{
+var initialIssues = [{
   id: 1,
   status: 'New',
   owner: 'Ravan',
@@ -63,15 +63,21 @@ function (_React$Component2) {
   _inherits(IssueTable, _React$Component2);
 
   function IssueTable() {
+    var _this;
+
     _classCallCheck(this, IssueTable);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(IssueTable).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(IssueTable).call(this));
+    _this.state = {
+      issues: initialIssues
+    };
+    return _this;
   }
 
   _createClass(IssueTable, [{
     key: "render",
     value: function render() {
-      var issueRows = issues.map(function (issue) {
+      var issueRows = this.state.issues.map(function (issue) {
         return React.createElement(IssueRow, {
           key: issue.id,
           issue: issue
