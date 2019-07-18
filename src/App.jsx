@@ -99,14 +99,21 @@ class IssueList extends React.Component {
     fetch('/api/issues', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newIssue),
-    }).then(response =>                                                                            response.json()
-    ).then(updatedIssue => {
-      updatedIssue.created = new Date(updatedIssue.created);
-      if (updatedIssue.due)
-        updatedIssue.due = new Date(updatedIssue.due);
-      const newIssues = this.state.issues.concat(updatedIssue);
-      this.setState({ issues: newIssues });
+      body: JSON.stringify(newIssue                                                                                              ),
+    }).then(response => {
+      if (response.ok) {
+        response.json().then(updatedIssue => {
+          updatedIssue.created = new Date(updatedIssue.created);
+          if (updatedIssue.due)
+            updatedIssue.due = new Date(updatedIssue.due);
+          const newIssues = this.state.issues.concat(updatedIssue);
+          this.setState({ issues: newIssues });
+        });
+      } else {
+        response.json().then(error => {
+          alert("Failed to add issue: " + error.message)
+        });
+      }
     }).catch(err => {
       alert("Error in sending data to server: " + err.message);
     });
