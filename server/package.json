@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
     "start": "nodemon -w server server.js"
   },
   "author": "",
@@ -14,5 +15,10 @@
     "express": "^4.17.1",
     "mongodb": "^3.2.7",
     "nodemon": "^1.19.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }
