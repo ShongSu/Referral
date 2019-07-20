@@ -4,7 +4,7 @@ const webpack = require('webpack');
 module.exports = {
   mode: 'development',
   entry: {                
-    app: './src/App.jsx',                
+    app: ['./src/App.jsx'],                
   },    
   output: {
     filename: '[name].bundle.js',
@@ -25,4 +25,5 @@ module.exports = {
       chunks: 'all',
     },
   },
+  devtool: 'source-map'              
 };
