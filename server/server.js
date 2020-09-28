@@ -1,12 +1,19 @@
 const express = require('express');
 const app = express();
+const path = require('path');
+
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb')
 const Issue = require('./issue.js');              
 
-app.use(express.static('public'));
 app.use(bodyParser.json());
 
+
+app.use(express.static(path.join(__dirname, '../public')))
+
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'))
+})
 
 // const url = 'mongodb://localhost/issuetracker';
 // let db;
@@ -18,7 +25,7 @@ app.use(bodyParser.json());
 //   db = client.db();
 // }
 
-app.get('/api/hello', (req, res) => {
+app.get('/hello', (req, res) => {
   res.send({data:'Hello World'});
 });
 
