@@ -41,5 +41,6 @@
     "webpack-dev-server": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0",
     "whatwg-fetch": "^3.0.0"
-  }
+  },
+  "proxy": "http://localhost:5000/",
 }
