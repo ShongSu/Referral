@@ -18,9 +18,9 @@ app.use(bodyParser.json());
 //   db = client.db();
 // }
 
-// app.get('/hello', (req, res) => {
-//   res.send('Hello World');
-// });
+app.get('/hello', (req, res) => {
+  res.send('Hello World');
+});
 
 // app.get('/api/issues', (req, res) => {
 //   db.collection('issues').find().toArray().then(issues => {
