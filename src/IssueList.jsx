@@ -54,7 +54,7 @@ export default class IssueList extends React.Component {
         this.loadData();
     }
     loadData() {
-        fetch('/.netlify/functions/hello').then(response => {
+        fetch('/api/hello').then(response => {
             if (response.ok) {
                 response.json().then(data => {
                     this.setState({
