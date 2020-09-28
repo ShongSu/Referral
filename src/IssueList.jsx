@@ -48,64 +48,62 @@ export default class IssueList extends React.Component {
     constructor() {
         super();
         this.state = { issues: [] };
-        this.createIssue = this.createIssue.bind(this);
+        // this.createIssue = this.createIssue.bind(this);
     }
-    componentDidMount() {
-        this.loadData();
-    }
-    loadData() {
-        fetch('/api/issues').then(response => {
-            if (response.ok) {
-                response.json().then(data => {
-                    console.log("Total count of records:", data._metadata.total_count);
-                    data.records.forEach(issue => {
-                        issue.created = new Date(issue.created);
-                        if (issue.due)
-                            issue.due = new Date(issue.due);
-                    });
-                    this.setState({ issues: data.records });
-                });
-            } else {
-                response.json().then(error => {
-                    alert("Failed to fetch issues:" + error.message)
-                });
-            }
-        }).catch(err => {
-            alert("Error in fetching data from server:", err);
-        });
-    }
-    createIssue(newIssue) {
-        fetch('/api/issues', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newIssue),
-        }).then(response => {
-            if (response.ok) {
-                response.json().then(updatedIssue => {
-                    updatedIssue.created = new Date(updatedIssue.created);
-                    if (updatedIssue.due)
-                        updatedIssue.due = new Date(updatedIssue.due);
-                    const newIssues = this.state.issues.concat(updatedIssue);
-                    this.setState({ issues: newIssues });
-                });
-            } else {
-                response.json().then(error => {
-                    alert("Failed to add issue: " + error.message)
-                });
-            }
-        }).catch(err => {
-            alert("Error in sending data to server: " + err.message);
-        });
-    }
+    // componentDidMount() {
+    //     this.loadData();
+    // }
+    // loadData() {
+    //     fetch('/api/issues').then(response => {
+    //         if (response.ok) {
+    //             response.json().then(data => {
+    //                 console.log("Total count of records:", data._metadata.total_count);
+    //                 data.records.forEach(issue => {
+    //                     issue.created = new Date(issue.created);
+    //                     if (issue.due)
+    //                         issue.due = new Date(issue.due);
+    //                 });
+    //                 this.setState({ issues: data.records });
+    //             });
+    //         } else {
+    //             response.json().then(error => {
+    //                 alert("Failed to fetch issues:" + error.message)
+    //             });
+    //         }
+    //     }).catch(err => {
+    //         alert("Error in fetching data from server:", err);
+    //     });
+    // }
+    // createIssue(newIssue) {
+    //     fetch('/api/issues', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify(newIssue),
+    //     }).then(response => {
+    //         if (response.ok) {
+    //             response.json().then(updatedIssue => {
+    //                 updatedIssue.created = new Date(updatedIssue.created);
+    //                 if (updatedIssue.due)
+    //                     updatedIssue.due = new Date(updatedIssue.due);
+    //                 const newIssues = this.state.issues.concat(updatedIssue);
+    //                 this.setState({ issues: newIssues });
+    //             });
+    //         } else {
+    //             response.json().then(error => {
+    //                 alert("Failed to add issue: " + error.message)
+    //             });
+    //         }
+    //     }).catch(err => {
+    //         alert("Error in sending data to server: " + err.message);
+    //     });
+    // }
     render() {
         return (
             <React.Fragment>
                 <h1>Issue Tracker</h1>
-                <IssueFilter />
                 <hr />
-                <IssueTable issues={this.state.issues} />
+                <h1>Issue Test</h1>
                 <hr />
-                <IssueAdd createIssue={this.createIssue} />
             </React.Fragment>
         );
     }
