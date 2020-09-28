@@ -18,8 +18,8 @@ app.use(bodyParser.json());
 //   db = client.db();
 // }
 
-app.get('/hello', (req, res) => {
-  res.send('Hello World');
+app.get('/api/hello', (req, res) => {
+  res.send({data:'Hello World'});
 });
 
 // app.get('/api/issues', (req, res) => {
